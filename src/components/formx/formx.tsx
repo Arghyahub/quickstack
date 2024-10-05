@@ -58,11 +58,16 @@ const FormX = ({
                   defaultStyle={defaultStyle.column}
                   customColStyle={row?.customRowStyle || ""}
                   type={col.type}
-                  value={(col as any)?.value || ""}
                   errorText={col.errorText}
                   defaultValue={col?.defaultValue || ""}
                   label={col.label}
                   name={col.name}
+                  {...(col.isControlled
+                    ? {
+                        state: col.value,
+                        setState: col.setValue,
+                      }
+                    : {})}
                 />
               );
             } else {

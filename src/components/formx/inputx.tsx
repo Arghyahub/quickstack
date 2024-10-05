@@ -7,14 +7,16 @@ interface Props {
   defaultStyle?: string;
   customColStyle?: string;
   type: InputXType;
-  value: string;
+  value?: string;
   errorText: string;
   defaultValue: string;
   label: string;
   name: string;
+  state?: string;
+  setState?: (value: string) => void;
 }
 
-const Inputx = ({ defaultStyle, customColStyle, type }: Props) => {
+const Inputx = ({ defaultStyle, customColStyle, type, ...temp }: Props) => {
   return (
     <input
       type={type}
