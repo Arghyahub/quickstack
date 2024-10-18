@@ -1,12 +1,16 @@
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 import React, { useEffect, useRef } from "react";
-
-export type InputXType = "text" | "number" | "email";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Props {
   defaultStyle?: string;
-  type: InputXType;
   value?: string;
   errorText: string;
   defaultValue: string;
@@ -17,34 +21,35 @@ interface Props {
   AllData: object;
   setAllData: React.Dispatch<React.SetStateAction<{}>>;
   onChange?: (val: string) => void;
+  options: { label: string; value: string }[];
 }
 
-const Inputx = ({
+const SelectX = ({
   defaultStyle,
-  type,
   errorText,
   defaultValue,
   label,
   name,
+  options,
   state,
   setState,
   AllData,
   setAllData,
   onChange = (val) => {},
 }: Props) => {
-  const ipref = useRef<null | HTMLInputElement>(null);
+  //   const ipref = useRef<null | HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (ipref !== null && ipref.current !== null) {
-      ipref.current.value = defaultValue;
-      setAllData({ ...AllData, [name]: defaultValue });
-    }
-  }, [ipref]);
+  //   useEffect(() => {
+  //     if (ipref !== null && ipref.current !== null) {
+  //       ipref.current.value = defaultValue;
+  //       setAllData({ ...AllData, [name]: defaultValue });
+  //     }
+  //   }, [ipref]);
 
   return (
     <div className="flex flex-col gap-1 w-full">
       <div className="flex flex-row justify-between">
-        <label htmlFor={name} className="ml-[6px]">
+        <label htmlFor={name} className="ml-[4px]">
           {label}
         </label>
         <div
@@ -59,25 +64,36 @@ const Inputx = ({
           </p>
         </div>
       </div>
-      <input
-        type={type}
-        className={cn(
-          "border-2 border-slate-400 m-1 px-2 py-1 rounded-lg w-full",
-          defaultStyle
-        )}
+      <Select
         name={name}
-        ref={ipref}
-        {...(state !== undefined && { value: state })}
-        onChange={(e) => {
+        {...(state !== undefined ? { value: state } : {})}
+        defaultValue={defaultValue}
+        onValueChange={(e) => {
           if (setState !== undefined) {
-            setState(e.target.value);
+            setState(e);
           }
-          setAllData({ ...AllData, [name]: e.target.value });
-          onChange(e.target.value);
+          setAllData({ ...AllData, [name]: e });
+          onChange(e);
         }}
-      />
+      >
+        <SelectTrigger
+          className={cn(
+            "border-2 border-slate-400 ring-0 w-full",
+            defaultStyle
+          )}
+        >
+          <SelectValue placeholder="" />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option, ind) => (
+            <SelectItem key={`${name}-${ind}`} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 };
 
-export default Inputx;
+export default SelectX;
