@@ -2,13 +2,6 @@ import useDebounce from "@/lib/hooks/use-debounce";
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import useClickOutside from "@/lib/hooks/use-click-outside";
 
 export type InputXType = "text" | "number" | "email";
@@ -18,7 +11,7 @@ interface Props {
   value?: string;
   errorText: string;
   defaultValue: string;
-  label: string;
+  label?: string;
   name: string;
   state?: string;
   setState?: (value: string) => void;
@@ -32,7 +25,7 @@ const SearchX = ({
   defaultStyle,
   errorText,
   defaultValue,
-  label,
+  label = "",
   name,
   state,
   setState,
@@ -115,9 +108,6 @@ const SearchX = ({
                 key={`option-${idx}`}
                 className="hover:bg-slate-200 p-1 text-left"
                 onClick={() => {
-                  if (setState !== undefined) {
-                    setState(option.label);
-                  }
                   setAllData({ ...AllData, [name]: option.value });
                   onChange(option.label);
                   if (ipref && ipref.current) {
@@ -126,7 +116,7 @@ const SearchX = ({
                   setIsSearching(false);
                 }}
               >
-                {option.label}
+                <p>{option.label}</p>
               </button>
             ))}
           </div>

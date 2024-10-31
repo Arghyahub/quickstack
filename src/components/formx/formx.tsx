@@ -22,12 +22,13 @@ type SelectType =
   | { type: InputXType | "password" | "date" | "time" };
 
 interface ColumnType {
-  label: string;
+  label?: string;
   defaultValue?: string;
   errorText?: string;
   name: string;
   // type: InputXType | "password" | "date" | "time";
   onChange?: (value: string) => void;
+  placeholder?: string;
 }
 
 export interface FromXData {
@@ -42,8 +43,8 @@ interface Props {
     row?: string;
     buttonRow?: string;
   };
-  data: FromXData[];
-  handleSubmit: (data: any) => void;
+  row: FromXData[];
+  handleSubmit: (data: Record<string, string>) => void;
   hasCancel?: boolean;
   handleCancel?: () => void;
   submitText?: string;
@@ -51,7 +52,7 @@ interface Props {
 
 const FormX = ({
   defaultStyle = { form: "", column: "", row: "", buttonRow: "" },
-  data,
+  row,
   handleSubmit,
   hasCancel = true,
   handleCancel = () => {},
@@ -59,12 +60,17 @@ const FormX = ({
 }: Props) => {
   const [AllData, setAllData] = useState({});
 
+  const name = row.flatMap((row) => row.columns).map((elem) => elem.name);
+
   return (
     <form
-      onSubmit={() => handleSubmit(AllData)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit(AllData);
+      }}
       className={cn("flex flex-col w-full gap-2", defaultStyle.form)}
     >
-      {data.map((row, rowIdx) => (
+      {row.map((row, rowIdx) => (
         <div
           key={rowIdx}
           className={cn(
@@ -99,6 +105,7 @@ const FormX = ({
                     : {})}
                   AllData={AllData}
                   setAllData={setAllData}
+                  placeholder={col.placeholder}
                 />
               );
             } else if (col.type === "password") {
@@ -119,6 +126,7 @@ const FormX = ({
                         setState: col.setValue,
                       }
                     : {})}
+                  placeholder={col.placeholder}
                 />
               );
             } else if (col.type == "select") {

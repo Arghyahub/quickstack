@@ -14,7 +14,7 @@ interface Props {
   value?: string;
   errorText: string;
   defaultValue: string;
-  label: string;
+  label?: string;
   name: string;
   state?: string;
   setState?: (value: string) => void;
@@ -28,7 +28,7 @@ const SelectX = ({
   defaultStyle,
   errorText,
   defaultValue,
-  label,
+  label = "",
   name,
   options,
   state,

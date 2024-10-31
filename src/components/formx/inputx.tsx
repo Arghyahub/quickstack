@@ -10,27 +10,29 @@ interface Props {
   value?: string;
   errorText: string;
   defaultValue: string;
-  label: string;
+  label?: string;
   name: string;
   state?: string;
   setState?: (value: string) => void;
   AllData: object;
   setAllData: React.Dispatch<React.SetStateAction<{}>>;
   onChange?: (val: string) => void;
+  placeholder?: string;
 }
 
 const Inputx = ({
   defaultStyle,
   type,
-  errorText,
+  errorText = "",
   defaultValue,
-  label,
+  label = "",
   name,
   state,
   setState,
   AllData,
   setAllData,
   onChange = (val) => {},
+  placeholder,
 }: Props) => {
   const ipref = useRef<null | HTMLInputElement>(null);
 
@@ -42,8 +44,8 @@ const Inputx = ({
   }, [ipref]);
 
   return (
-    <div className="flex flex-col gap-1 w-full">
-      <div className="flex flex-row justify-between">
+    <div className="flex flex-col gap-1 p-1 w-full">
+      <div className="flex flex-row justify-between w-full">
         <label htmlFor={name} className="ml-[6px]">
           {label}
         </label>
@@ -62,11 +64,12 @@ const Inputx = ({
       <input
         type={type}
         className={cn(
-          "border-2 border-slate-400 m-1 px-2 py-1 rounded-lg w-full",
+          "border-2 border-slate-400 my-1 px-2 py-1 rounded-lg w-full",
           defaultStyle
         )}
         name={name}
         ref={ipref}
+        {...(placeholder !== undefined && { placeholder })}
         {...(state !== undefined && { value: state })}
         onChange={(e) => {
           if (setState !== undefined) {

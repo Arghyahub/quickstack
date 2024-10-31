@@ -28,6 +28,11 @@ class ApiClient {
 
       const result = await response.json();
 
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        window.location.href = "/auth/login";
+      }
+
       if (!response.ok) {
         throw new Error(result?.message || "Server error");
       }
@@ -52,6 +57,11 @@ class ApiClient {
       });
 
       const result = await response.json();
+
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        window.location.href = "/auth/login";
+      }
 
       if (!response.ok) {
         throw new Error(result?.message || "Server error");
